@@ -1,7 +1,7 @@
 # Team POLOMINT chatbot project
 
-## UI
-The UI project is contained in `/ui`.
+## Chatbot UI
+The UI project is contained in `/chatbot-ui`.
 
 #### Prerequisites
 - Node v10.15 +

@@ -20,3 +20,68 @@
 .App-link {
   color: #09d3ac;
 }
+
+.chat-area {
+  position: absolute;
+  top:80px;
+  bottom:100px;
+  left: 0;
+  right: 0;
+}
+
+.chatbox {
+  border: none;
+  display: block;
+  width: 64%;
+  min-height: 40px;
+  padding: 16px;
+  margin: 8px;
+  -webkit-box-shadow: 4px 4px 17px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 4px 4px 17px -6px rgba(0,0,0,0.75);
+  box-shadow: 4px 4px 17px -6px rgba(0,0,0,0.75);
+}
+
+.chatbox-ms {
+  background: rgb(201, 205, 240);
+  color: rgb(51, 56, 51);
+  text-align: left;
+  border-radius: 16px 16px 16px 0px;
+}
+
+.chatbox-user {
+  background: rgb(51, 56, 51);
+  color: white;
+  float: right;
+  clear: both;
+  text-align: right;
+  border-radius: 16px 16px 0px 16px;
+}
+
+.message-author {
+  background: rgb(132, 155, 130);
+  position: absolute;
+  bottom:0;
+  height: 100px;
+  left: 0;
+  right: 0;
+  text-align: left;
+}
+
+.message-author form {
+  display: block;
+  padding: 16px;
+}
+
+.message-author label {
+  padding: 4px 0;
+  display: block;
+}
+#message-input {
+  color: rgb(39, 39, 39);
+  display: block;
+  width: 100%;
+  font-size: 16px;
+  height:28px;
+  border: 1px solid white;
+  background: none;
+}
