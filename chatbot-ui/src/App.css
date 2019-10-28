@@ -22,15 +22,17 @@
 }
 
 .chat-area {
-  position: absolute;
-  top:80px;
-  bottom:100px;
+  bottom: 100px;
   left: 0;
+  overflow-y: scroll;
+  position: absolute;
   right: 0;
+  top: 80px;
 }
 
 .chatbox {
   border: none;
+  clear: both;
   display: block;
   width: 64%;
   min-height: 40px;
@@ -46,13 +48,13 @@
   color: rgb(51, 56, 51);
   text-align: left;
   border-radius: 16px 16px 16px 0px;
+  text-align: left;
 }
 
 .chatbox-user {
   background: rgb(51, 56, 51);
   color: white;
   float: right;
-  clear: both;
   text-align: right;
   border-radius: 16px 16px 0px 16px;
 }
