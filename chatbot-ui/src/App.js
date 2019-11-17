@@ -1,7 +1,9 @@
 import React, { useState, useReducer } from 'react';
 import './App.css';
 
-function App() {
+
+function App({exampleSocket}) {
+
 
   const initMessages = initialMessages => {
     return initialMessages;
@@ -36,6 +38,15 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialMessages, initMessages);
   const [currentMessage, setCurrentMessage] = useState('')
 
+  exampleSocket.onopen = function (event) {
+    console.log('opened socket')
+  };
+
+  exampleSocket.onmessage = function (event) {
+    console.log(event.data);
+    dispatch({type: 'sysMsg', payload: event.data})
+  }
+
   const showMessage = message => (
     <div className={`chatbox chatbox-${message.author}`}>
       <p>{message.content}</p>
@@ -50,7 +61,8 @@ function App() {
 
   const writeUserMessage = async (currentMessage) => {
     await dispatch({type: 'userMsg', payload: currentMessage})
-    respondFromSystem()
+    exampleSocket.send(currentMessage); 
+    //respondFromSystem()
   }
 
   const handleSubmit = (event, currentMessage) => {
