@@ -1,10 +1,10 @@
 
-
+var get = require('lodash/get');
 //
 // start DF app
 //
 
-const projectId = 'aiadviser-dhcviq';
+const projectId = 'banking-gxdxmk';
 const sessionId = '123456';
 const queries = ['hello', 'give me my balance']
 const languageCode = 'en'
@@ -43,6 +43,7 @@ async function detectIntent(
   }
 
   const responses = await sessionClient.detectIntent(request);
+
   return responses[0];
 }
 
@@ -51,6 +52,19 @@ const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 8081 });
  
 console.log('setting up ws')
+
+const sendEvent = ((item, ws, index) => {
+  setTimeout(() => {
+    const text = get(item.text, 'text')
+    text !== undefined && ws && ws.send(text[0])
+  }, 1000 * index)
+})
+
+const sendCardEvent = ((item, ws, index) => {
+  setTimeout(() => {
+    ws.send(JSON.stringify(item.card))
+  }, 1000 * index)
+})
 
 async function executeQueries(projectId, sessionId, queries, languageCode, ws) {
   // Keeping the context across queries let's us simulate an ongoing conversation with the bot
@@ -67,13 +81,33 @@ async function executeQueries(projectId, sessionId, queries, languageCode, ws) {
         languageCode
       );
       console.log('Detected intent');
-      console.log(
-        `Fulfillment Text: ${intentResponse.queryResult.fulfillmentText}`
-      );
+    
+      if (intentResponse.queryResult.fulfillmentMessages.length > 1) {
+        intentResponse.queryResult.fulfillmentMessages.forEach((item, index) => {
+          
+          if (item.platform === 'FACEBOOK') {
+          
+            if (item.card) {
+              sendCardEvent(item, ws, index)
+            } else {
+              sendEvent(item, ws, index)
+            }
+            
+          }
+        })
+      } else {
+        console.log(
+          `Fulfillment Text: ${intentResponse.queryResult.fulfillmentText}`
+        );
+          
+  
+  
+        ws && ws.send(intentResponse.queryResult.fulfillmentText);
+        // Use the context from this response for next queries
+        context = intentResponse.queryResult.outputContexts;
+      }
 
-      ws && ws.send(intentResponse.queryResult.fulfillmentText);
-      // Use the context from this response for next queries
-      context = intentResponse.queryResult.outputContexts;
+      
     } catch (error) {
       console.log(error);
     }

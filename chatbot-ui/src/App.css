@@ -1,3 +1,50 @@
+
+:root {
+  --green-leaf: #4d8210;
+  --green-leaf-wash: #edf4e9;
+  --red: #d81118;
+  --red-wash: #fdf3f2;
+  --amber: #e5c129;
+  --active-green: #3e690d;
+  --success-green: #69bb0b;
+  --silver: #cccccc;
+  --concrete: #f2f2f2;
+  --black: #000000;
+  --white: #ffffff;
+}
+
+@font-face {
+  font-family: 'M&SLondon';
+  src: url('./fonts/M&SLondon-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'M&SLondon';
+  src: url('./fonts/M&SLondon-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  font-family: 'M&SLondon';
+  font-weight: 400;
+}
+
+h1 {
+  font-weight: 400;
+}
+
+p {
+  margin: 6px;
+}
+
+a {
+  display:block;
+  color: var(--silver);
+}
+
 .App {
   text-align: center;
 }
@@ -7,18 +54,36 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  height: 80px;
+  background-color: var(--white);
+  height: 66px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--black);
+  border-bottom: 1px solid var(--green-leaf);
 }
 
 .App-link {
   color: #09d3ac;
+}
+
+.subBtn {
+  width: 66px;
+  float: right;
+}
+
+.msgInput {
+  float: left;
+  width: 66%;
+  width: calc(100% - 80px);
+  height: 30px;
+  padding: 4px;
+  display: block;
+  font-size: 16px;
+  background: var(--white);
+  color: var(--black);
 }
 
 .chat-area {
@@ -34,33 +99,35 @@
   border: none;
   clear: both;
   display: block;
-  width: 64%;
-  min-height: 40px;
-  padding: 16px;
-  margin: 8px;
+  min-height: 34px;
+  padding: 8px;
+  margin: 8px 8px 20px;
+  width: 66%;
   -webkit-box-shadow: 4px 4px 17px -6px rgba(0,0,0,0.75);
   -moz-box-shadow: 4px 4px 17px -6px rgba(0,0,0,0.75);
   box-shadow: 4px 4px 17px -6px rgba(0,0,0,0.75);
 }
 
-.chatbox-ms {
-  background: rgb(201, 205, 240);
-  color: rgb(51, 56, 51);
+.chatbox-system {
+  background: var(--green-leaf);
+  color: var(--white);
   text-align: left;
   border-radius: 16px 16px 16px 0px;
   text-align: left;
+  font-weight: 600;
 }
 
 .chatbox-user {
-  background: rgb(51, 56, 51);
-  color: white;
+  background: var(--concrete);
+  color: var(--black);
   float: right;
   text-align: right;
   border-radius: 16px 16px 0px 16px;
 }
 
 .message-author {
-  background: rgb(132, 155, 130);
+  background: var(--white);
+  color: var(--black);
   position: absolute;
   bottom:0;
   height: 100px;
@@ -77,13 +144,4 @@
 .message-author label {
   padding: 4px 0;
   display: block;
-}
-#message-input {
-  color: rgb(39, 39, 39);
-  display: block;
-  width: 100%;
-  font-size: 16px;
-  height:28px;
-  border: 1px solid white;
-  background: none;
 }

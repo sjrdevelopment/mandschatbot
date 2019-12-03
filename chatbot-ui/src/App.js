@@ -1,12 +1,20 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+ 
 import './App.css';
 
+import Button from './components/button/button';
+import Logo from './components/logo/Logo';
 
 function App({exampleSocket}) {
 
+  const anchor = useRef(null);
 
   const initMessages = initialMessages => {
-    return initialMessages;
+    return [{
+      author: 'system',
+      content: 'Hi how can i help?',
+    }];
   }
 
   const reducer = (state, action) => {
@@ -34,9 +42,9 @@ function App({exampleSocket}) {
     }
   }
 
-  const initialMessages = [{author: 'system', content: 'test message 2 from system'}, {author: 'user', content: 'test message 2 from user'}]
-  const [state, dispatch] = useReducer(reducer, initialMessages, initMessages);
+  const [state, dispatch] = useReducer(reducer, [], initMessages);
   const [currentMessage, setCurrentMessage] = useState('')
+  const [isMaskedFlag, setIsMaskedFlag] = useState(false)
 
   exampleSocket.onopen = function (event) {
     console.log('opened socket')
@@ -44,25 +52,60 @@ function App({exampleSocket}) {
 
   exampleSocket.onmessage = function (event) {
     console.log(event.data);
+    
     dispatch({type: 'sysMsg', payload: event.data})
+    
+    anchor.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+
+    if (event.data.includes('pin') || event.data.includes('password')) {
+      setIsMaskedFlag(true)
+    } else {
+      setIsMaskedFlag(false)
+    }
   }
 
-  const showMessage = message => (
-    <div className={`chatbox chatbox-${message.author}`}>
-      <p>{message.content}</p>
-    </div>
-  )
+  const showMessage = message => {
+    let buttons = []
+
+    try {
+      const content = JSON.parse(message.content)
+      buttons = content.buttons
+      
+      return (
+        <div className={`chatbox chatbox-${message.author}`}>
+          <ReactMarkdown source={content.title} />
   
-  const respondFromSystem = () => {
-    setTimeout(() => {
-     dispatch({type: 'sysMsg', payload: 'test response from system'})
-    }, 1000)
+          {buttons.map(item => (
+            <button>{item.text}</button>
+          ))}
+        </div>
+      )
+
+    } catch (error) {
+    }
+
+    
+    return (
+      <div className={`chatbox chatbox-${message.author}`}>
+        <ReactMarkdown source={message.content} />
+
+      </div>
+    )
   }
 
   const writeUserMessage = async (currentMessage) => {
-    await dispatch({type: 'userMsg', payload: currentMessage})
-    exampleSocket.send(currentMessage); 
-    //respondFromSystem()
+    if (currentMessage !== '') {
+      exampleSocket.send(currentMessage); 
+    
+      if (isMaskedFlag) {
+        currentMessage = '&ast;&ast;&ast;&ast;&ast;&ast;';
+      }
+
+      await dispatch({type: 'userMsg', payload: currentMessage})
+    }
   }
 
   const handleSubmit = (event, currentMessage) => {
@@ -75,17 +118,18 @@ function App({exampleSocket}) {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>M&S Bank</h1>
+        <Logo />
       </header>
       <main>
-        <section class="chat-area">
+        <section className="chat-area">
           {state.map(message => showMessage(message))}
+          <span ref={anchor} />
         </section>
 
         <div className="message-author">
           <form name="" onSubmit={(event) => { handleSubmit(event, currentMessage) }} >
-            <label for="message-input">Enter your message</label>
-            <input id="message-input" type="text" value={currentMessage} onChange={(event) => {setCurrentMessage(event.target.value)}} />
+            <span className="subBtn"><Button onClick={(event) => { handleSubmit(event, currentMessage) }}>Send</Button></span>
+            <input className="msgInput" id="message-input" type="text" placeholder="Ask me anything" value={currentMessage} onChange={(event) => {setCurrentMessage(event.target.value)}} />
           </form>
         </div>
       </main>

@@ -5,7 +5,6 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const exampleSocket = new WebSocket('ws://localhost:8081');
-  console.log('hi')
 
 ReactDOM.render(<App exampleSocket={exampleSocket}/>, document.getElementById('root'));
 

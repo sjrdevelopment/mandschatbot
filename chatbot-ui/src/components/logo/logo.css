@@ -1,0 +1,25 @@
+.LogoWrapper {
+    display: block;
+    position: relative;
+    height: 100%;
+    max-height: 32px;
+    width: 200px;
+    margin: 16px;
+  }
+  
+  .Logo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    max-width: 100%;
+    max-height: 100%;
+    fill: var(--black);
+  }
+  
+  .stretcher {
+    display: block;
+    height: 100%;
+  }
+  

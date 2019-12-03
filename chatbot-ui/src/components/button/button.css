@@ -1,0 +1,38 @@
+.Button {
+    border-radius: 0;
+    cursor: pointer;
+    display: inline-block;
+    padding: 12px 16px 10px;
+    line-height: 1.5;
+    overflow: hidden;
+    width: 100%;
+    touch-action: manipulation;
+    text-align: center;
+    text-decoration: none;
+    -webkit-backface-visibility: hidden;
+    transition: background-color 50ms cubic-bezier(0.645, 0.045, 0.355, 1);
+
+    color: var(--white);
+    background-color: var(--green-leaf);
+    border: 1px solid var(--green-leaf);
+    border-radius: var(--border-radius);
+    font-weight: 700;
+
+    &:disabled {
+        background-color: var(--silver);
+        border-color: var(--silver);
+        cursor: not-allowed;
+        touch-action: none;
+    }
+
+    &:focus {
+        outline: 2px solid blue;
+        outline-offset: 1px;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .Button {
+        width: auto;
+    }
+}
