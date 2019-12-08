@@ -45,6 +45,8 @@ function App({exampleSocket}) {
   const [state, dispatch] = useReducer(reducer, [], initMessages);
   const [currentMessage, setCurrentMessage] = useState('')
   const [isMaskedFlag, setIsMaskedFlag] = useState(false)
+  const [currentButtons, setCurrentButtons] = useState([])
+  const [currentButtonsActive, setCurrentButtonsActive] = useState(false)
 
   exampleSocket.onopen = function (event) {
     console.log('opened socket')
@@ -67,33 +69,38 @@ function App({exampleSocket}) {
     }
   }
 
-  const showMessage = message => {
+  const showMessage = (message, isMostRecent) => {
     let buttons = []
+    let textString = message.content
 
     try {
       const content = JSON.parse(message.content)
       buttons = content.buttons
       
+      textString = content.title
+
+      if (isMostRecent) {
+        buttons.length && setCurrentButtons(buttons)
+        setCurrentButtonsActive(true)
+      }
+
       return (
         <div className={`chatbox chatbox-${message.author}`}>
-          <ReactMarkdown source={content.title} />
-  
-          {buttons.map(item => (
-            <button>{item.text}</button>
-          ))}
+          <ReactMarkdown source={textString} />
         </div>
       )
 
     } catch (error) {
+      
+
+      return (
+        <div className={`chatbox chatbox-${message.author}`}>
+        
+          <ReactMarkdown source={textString} />
+  
+        </div>
+      )
     }
-
-    
-    return (
-      <div className={`chatbox chatbox-${message.author}`}>
-        <ReactMarkdown source={message.content} />
-
-      </div>
-    )
   }
 
   const writeUserMessage = async (currentMessage) => {
@@ -103,6 +110,9 @@ function App({exampleSocket}) {
       if (isMaskedFlag) {
         currentMessage = '&ast;&ast;&ast;&ast;&ast;&ast;';
       }
+
+      setCurrentButtonsActive(false)
+    
 
       await dispatch({type: 'userMsg', payload: currentMessage})
     }
@@ -122,9 +132,22 @@ function App({exampleSocket}) {
       </header>
       <main>
         <section className="chat-area">
-          {state.map(message => showMessage(message))}
+          {state.map((message, index, arr) => {
+            const isMostRecent = index === arr.length-1 
+            return showMessage(message, isMostRecent)
+          })}
           <span ref={anchor} />
         </section>
+
+        {currentButtonsActive && (
+          <div className="user-options-buttons">
+            <div className="user-options-buttons-inner">
+              {currentButtons.map(item => (
+                <button type="button" onClick={(event) => {writeUserMessage(item.text)}}>{item.text}</button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="message-author">
           <form name="" onSubmit={(event) => { handleSubmit(event, currentMessage) }} >
