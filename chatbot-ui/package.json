@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "dialogflow": "^0.14.1",
+    "dialogflow": "^4.0.3",
     "lodash": "^4.17.15",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-markdown": "^4.2.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
